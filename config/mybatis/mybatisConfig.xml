@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<!-- 全局setting配置，根据需要添加 -->
+	
+	<typeAliases>
+		<!-- 批量别名的定义 -->
+		<package name="edu.bupt.ssm.po"/>
+	</typeAliases>
+	
+
+	<!-- 加载映射文件 -->
+	<mappers>
+		<!-- 和spring整合后，使用mapper扫描器MapperScannerConfigurer，这里不需要配置了 -->
+		<!-- <package name="edu.bupt.ssm.mapper"/> -->
+	</mappers>
+	
+</configuration>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+       
+    <!-- 加载配置文件 ，db.properties文件中key命名要有一定的特殊规则 -->     
+    <context:property-placeholder location="classpath:db.properties"/>
+    
+	<!-- 数据源，使用dbcp -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+  	destroy-method="close">
+	  	<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="maxActive" value="10"/>
+		<property name="maxIdle" value="5"/>
+  	</bean>
+       
+    <!-- 配置SQLSessionFactory，从mybatis-spring整合包里找 -->     
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	  	<!-- 加载数据源 -->
+		<property name="dataSource" ref="dataSource" />
+	  	<!-- 加载mybatis全局配置文件 -->
+		<property name="configLocation" value="classpath:mybatis/mybatisConfig.xml" />
+  	</bean>
+  	
+  	<!-- mapper的批量扫描
+  	从mapper包中扫描出mapper接口，自动创建代理对象并且在spring容器中注册
+ 	遵循规范：mapper.java和mapper.xml映射文件名称保持一致，且在一个目录中
+ 	自动扫描出来的mapper的bean的id为mapper类名（首字母小写）
+    -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	  	<!-- 如果扫描多个包，每个包中间使用半角逗号分隔符 -->
+	  	<property name="basePackage" value="edu.bupt.ssm.mapper"></property>
+	  	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+  	</bean>
+    
+      
+</beans>
